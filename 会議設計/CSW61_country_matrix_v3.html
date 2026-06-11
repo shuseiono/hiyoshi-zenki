@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>CSW61 各国スタンス・マトリクス v3</title>
+<style>
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #1a1a2e; color: #e0e0e0; margin: 0; padding: 20px; }
+  h2 { text-align: center; font-size: 15px; color: #a0c4ff; margin-bottom: 4px; letter-spacing: 1px; }
+  .subtitle { text-align: center; font-size: 10px; color: #7a8fa6; margin-bottom: 16px; line-height: 1.8; }
+  .tab-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
+  .tab { padding: 6px 16px; border-radius: 20px; font-size: 11px; cursor: pointer; border: 1px solid #334; background: #12122a; color: #7a8fa6; transition: all 0.2s; }
+  .tab.active { background: #2a3a5a; color: #a0c4ff; border-color: #a0c4ff; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .wrap { display: flex; justify-content: center; align-items: flex-start; gap: 8px; }
+  .y-label { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 11px; color: #a0c4ff; font-weight: bold; text-align: center; min-width: 16px; align-self: center; }
+  .y-ticks { display: flex; flex-direction: column; justify-content: space-between; font-size: 9px; color: #7a8fa6; text-align: right; padding: 10px 0; }
+  .matrix-col { display: flex; flex-direction: column; align-items: center; }
+  .matrix { position: relative; width: 520px; background: #12122a; border: 1px solid #2a3050; overflow: visible; }
+  .grid-v { position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: #2a3050; }
+  .grid-h { position: absolute; top: 50%; left: 0; height: 1px; width: 100%; background: #2a3050; }
+  .q-label { position: absolute; font-size: 8px; color: #3a4560; line-height: 1.4; }
+  .dot { position: absolute; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; color: #fff; cursor: pointer; transform: translate(-50%, -50%); transition: transform 0.15s; z-index: 10; text-align: center; line-height: 1.2; }
+  .dot:hover { transform: translate(-50%, -50%) scale(1.3); z-index: 30; }
+  .x-ticks { display: flex; justify-content: space-between; font-size: 9px; color: #7a8fa6; margin-top: 4px; }
+  .x-label { font-size: 11px; color: #a0c4ff; font-weight: bold; margin-top: 3px; text-align: center; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; font-size: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3); }
+  .size-note { text-align: center; font-size: 10px; color: #7a8fa6; margin-top: 8px; }
+  #tooltip { display: none; position: fixed; background: #1e2a3a; border: 1px solid #a0c4ff; border-radius: 8px; padding: 10px 14px; font-size: 11px; max-width: 280px; z-index: 200; pointer-events: none; line-height: 1.6; }
+  #tooltip .t-name { font-size: 13px; font-weight: bold; color: #a0c4ff; margin-bottom: 6px; }
+  #tooltip .t-ax { color: #7af0b0; margin-bottom: 2px; }
+  #tooltip .t-dev { color: #ffb347; margin-bottom: 2px; }
+  #tooltip .t-note { color: #bbb; margin-top: 6px; font-size: 10px; border-top: 1px solid #2a3050; padding-top: 6px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; max-width: 760px; margin-left: auto; margin-right: auto; }
+  .card { background: #1e2535; border: 1px solid #2a3a50; border-radius: 8px; padding: 10px 12px; width: 210px; font-size: 10px; line-height: 1.6; }
+  .card .c-name { font-weight: bold; font-size: 12px; margin-bottom: 5px; }
+  .card .c-row { color: #9ab; margin-bottom: 2px; }
+  .card .c-key { color: #7af0b0; font-weight: bold; }
+  .card .c-dev { color: #ffb347; font-weight: bold; }
+  .fault-wrap { max-width: 680px; margin: 0 auto; }
+  .fault-group { margin-bottom: 20px; background: #1a2030; border: 1px solid #2a3050; border-radius: 8px; padding: 14px 16px; }
+  .fault-group h3 { font-size: 12px; margin: 0 0 10px 0; }
+  .fault-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; font-size: 11px; }
+  .fault-flag { width: 52px; min-width: 52px; font-weight: bold; color: #fff; font-size: 10px; text-align: center; padding: 3px 4px; border-radius: 4px; }
+  .fault-content { flex: 1; line-height: 1.6; color: #ccc; }
+  .fault-tension { background: #2a1a1a; border-left: 3px solid #e87040; padding: 8px 12px; border-radius: 4px; font-size: 11px; color: #e8b090; margin-top: 8px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<h2>CSW61 各国スタンス・マトリクス v3</h2>
+<div class="subtitle">
+  横軸：人権普遍主義 ←→ 文化的多様性・主権重視<br>
+  縦軸：G77的発展の権利要求（強）↑ ↓ 低　　円サイズ：SRHR攻防での抵抗強度<br>
+  枠線色：<span style="color:#ffb347">橙</span>＝共通化受容（発展モデル観）　<span style="color:#8080ff">青</span>＝自律的発展志向　白＝中間
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('matrix')">マトリクス</div>
+  <div class="tab" onclick="switchTab('cards')">国別カード</div>
+  <div class="tab" onclick="switchTab('fault')">G77断層線</div>
+</div>
+
+<div id="view-matrix" class="view active">
+  <div class="wrap">
+    <div class="y-label">発展の権利要求 強 ↑ ｜ ↓ 弱</div>
+    <div class="y-ticks" style="height:360px;">
+      <span>強</span><span></span><span>中</span><span></span><span>弱</span>
+    </div>
+    <div class="matrix-col">
+      <div class="matrix" id="matrix" style="height:360px;">
+        <div class="grid-v"></div>
+        <div class="grid-h"></div>
+        <div class="q-label" style="left:8px;top:8px;">革新派＋資金要求強</div>
+        <div class="q-label" style="right:8px;top:8px;text-align:right;">保守派＋資金要求強</div>
+        <div class="q-label" style="left:8px;bottom:8px;">革新派＋資金要求弱</div>
+        <div class="q-label" style="right:8px;bottom:8px;text-align:right;">保守派＋資金要求弱</div>
+      </div>
+      <div class="x-ticks" style="width:520px;">
+        <span>← 人権普遍主義</span><span>中間</span><span>文化的多様性 →</span>
+      </div>
+      <div class="x-label" style="width:520px;">人権普遍主義 ←→ 文化的多様性・主権重視</div>
+    </div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="size-note">
+    ● 円サイズ = SRHR攻防での抵抗強度（大＝強く抵抗）<br>
+    枠線色：<span style="color:#ffb347">橙</span>＝共通化受容　<span style="color:#8080ff">青</span>＝自律的発展志向　白＝中間
+  </div>
+</div>
+
+<div id="view-cards" class="view">
+  <div class="cards" id="cards"></div>
+</div>
+
+<div id="view-fault" class="view">
+  <div class="fault-wrap" id="fault"></div>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+// x: 人権普遍主義(0) ←→ 文化的多様性(1)
+// y: 発展の権利要求 強(0上) ←→ 弱(1下)
+// srhSize: SRHR抵抗強度 → 円サイズに反映
+// devModel: 発展モデル観 (>0.3=共通化受容:#ffb347, <-0.2=自律的発展:#8080ff, 中間:白)
+const countries = [
+  {
+    name:"EU（欧州）", short:"EU",
+    x:0.09, y:0.75,
+    srhSize: 1.0,  // SRHR推進側
+    color:"#4a90d9", block:"革新派",
+    devModel: 0.7,
+    ax1:"人権普遍主義（強）— SRHR積極推進",
+    ax2:"G77資金要求：低（ODA義務化を拒否、条件付き支援を模索）",
+    ax3:"SRHR：強く推進（抵抗なし）",
+    dev:"共通化受容（グローバル市場参加を前提に女性の参加を推進）",
+    note:"CSW61交渉では従来合意を守る守勢。SRHR条件付き支援をめぐってG77OICと対立。"
+  },
+  {
+    name:"北欧諸国", short:"北欧",
+    x:0.06, y:0.80,
+    srhSize: 1.0,
+    color:"#5bc8af", block:"革新派",
+    devModel: 0.8,
+    ax1:"人権普遍主義（最強）— jus cogens接続論・SRHR主導",
+    ax2:"G77資金要求：低（ODA 0.7%自国達成済み・比較的柔軟）",
+    ax3:"SRHR：最も積極的に推進",
+    dev:"共通化受容（フェミニスト外交。グローバル市場参加を女性エンパワーメントの主要経路と位置づける）",
+    note:"SRHR迂回表現の発明を主導。転換点③の鍵を握る。"
+  },
+  {
+    name:"米国（トランプ政権）", short:"米国",
+    x:0.40, y:0.82,
+    srhSize: 1.8,
+    color:"#e87040", block:"米国（特殊）",
+    devModel: 0.5,
+    ax1:"中間〜文化的多様性寄りに移行中",
+    ax2:"G77資金要求：最も低（ODA 0.7%目標の削除を要求）",
+    ax3:"SRHR：後退（オバマ政権からの方針転換）",
+    dev:"共通化受容だがSRHR条件を撤廃しようとする点で革新派と対立",
+    note:"ODA削除要求がG77を結束させるバックファイアを引き起こす。最大の不確定要素。"
+  },
+  {
+    name:"ロシア", short:"露",
+    x:0.74, y:0.55,
+    srhSize: 2.5,
+    color:"#c0392b", block:"保守派",
+    devModel: -0.3,
+    ax1:"文化的多様性寄り（留保なし批准・実質不履行）",
+    ax2:"G77資金要求：中程度（開発の権利を外交カードに使う）",
+    ax3:"SRHR：強く抵抗（「人権」表現の希釈を繰り返し要求）",
+    dev:"自律的発展志向（主権・内政不干渉重視。反覇権主義的）",
+    note:"「人権」表現の希釈・政策空間条項の実質条項挿入を要求。CEDAW留保なし批准という矛盾を抱える。"
+  },
+  {
+    name:"サウジアラビア", short:"SA",
+    x:0.91, y:0.30,
+    srhSize: 3.5,
+    color:"#8e44ad", block:"OIC保守派",
+    devModel: -0.5,
+    ax1:"文化的多様性（最強）・シャリーア包括留保",
+    ax2:"G77資金要求：高（OICブロックとして要求）",
+    ax3:"SRHR：最も強く抵抗（「権利」表現の全面阻止を要求）",
+    dev:"自律的発展志向（石油資本主義という独自モデル。グローバル標準ジェンダー規範の押しつけを拒否）",
+    note:"SRHR攻防の最大抵抗勢力。ICPD「再確認」のダウングレードも要求。転換点①でODA要求と人権拒否の非対称性を突かれる。"
+  },
+  {
+    name:"インドネシア", short:"IDN",
+    x:0.80, y:0.32,
+    srhSize: 3.0,
+    color:"#d35400", block:"OIC保守派＋G77",
+    devModel: 0.1,
+    ax1:"文化的多様性（強）・留保なし批准・実質不履行",
+    ax2:"G77資金要求：高（G77主要国）",
+    ax3:"SRHR：強く抵抗",
+    dev:"中間（グローバル市場参加しつつ文化的条件を留保。G77として参加費用を要求）",
+    note:"転換点②の核心：国内少数民族問題で「文化的慣行の尊重」論が自己矛盾を露呈する。"
+  },
+  {
+    name:"南アフリカ", short:"ZAF",
+    x:0.38, y:0.12,
+    srhSize: 1.5,
+    color:"#27ae60", block:"G77・アフリカ",
+    devModel: 0.6,
+    ax1:"中間（人権普遍主義支持＋開発重視）",
+    ax2:"G77資金要求：最強クラス（ODA義務化・技術移転・開発の権利を最前線で主張）",
+    ax3:"SRHR：中程度の抵抗（G77利益との兼ね合い）",
+    dev:"共通化受容（グローバル市場参加を所与としたODA・技術移転要求。「参加費用の要求」型）",
+    note:"G77内共通化受容派の代表。転換点①でSRHR条件付き支援を受け入れるか問われる局面が生じる。"
+  },
+  {
+    name:"インド", short:"IND",
+    x:0.62, y:0.20,
+    srhSize: 2.0,
+    color:"#f39c12", block:"G77・アジア",
+    devModel: 0.2,
+    ax1:"やや文化的多様性寄り（家族関連条項留保）",
+    ax2:"G77資金要求：高（技術移転条件なし・南南協力要求）",
+    ax3:"SRHR：中程度の抵抗",
+    dev:"中間寄り（南南協力モデルを重視。西側主導のグローバル化に部分的抵抗）",
+    note:"転換点②：国内少数民族問題で先住民族論点の自己矛盾が露呈しうる。CEDAW第16条留保。"
+  },
+  {
+    name:"ブラジル（議長）", short:"BRA",
+    x:0.28, y:0.35,
+    srhSize: 1.8,
+    color:"#16a085", block:"G77＋調停役",
+    devModel: 0.4,
+    ax1:"中間〜やや人権普遍主義寄り",
+    ax2:"G77資金要求：中〜高（南南協力推進）",
+    ax3:"SRHR：中程度（調停役として中立を保つ）",
+    dev:"やや共通化受容（南南協力を重視しつつグローバル市場参加を前提とする）",
+    note:"先住民族フォーカスエリアの実質的主導国。議長として調停と自国利益の板挟み。"
+  },
+  {
+    name:"中国", short:"中国",
+    x:0.67, y:0.22,
+    srhSize: 2.2,
+    color:"#e74c3c", block:"保守派＋G77",
+    devModel: -0.4,
+    ax1:"文化的多様性寄り（主権・内政不干渉原則）",
+    ax2:"G77資金要求：高（開発の権利・技術移転・南南協力）",
+    ax3:"SRHR：抵抗（人権表現の希釈に協調）",
+    dev:"自律的発展志向（「開発の権利＝最も基本的な人権」という独自フレームで人権概念を再定義。中国モデルの正当化）",
+    note:"転換点①：「開発の権利こそ最も基本的な人権」という独自フレームで両陣営を揺さぶる。政策空間条項の実質条項挿入をロシアと共同で要求。"
+  }
+];
+
+function devBorderColor(d) {
+  if (d > 0.3) return "#ffb347";
+  if (d < -0.2) return "#8080ff";
+  return "rgba(255,255,255,0.2)";
+}
+
+const matrix = document.getElementById('matrix');
+const tooltip = document.getElementById('tooltip');
+const legend = document.getElementById('legend');
+const cardsEl = document.getElementById('cards');
+const fault = document.getElementById('fault');
+const W = 520, H = 360;
+
+// 凡例
+const blocks = {};
+countries.forEach(d => { blocks[d.block] = d.color; });
+Object.entries(blocks).forEach(([b, c]) => {
+  const el = document.createElement('div');
+  el.className = 'legend-item';
+  el.innerHTML = `<div class="legend-dot" style="background:${c}"></div><span>${b}</span>`;
+  legend.appendChild(el);
+});
+
+// ドット
+countries.forEach(d => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  const px = d.x * W, py = d.y * H;
+  const size = 24 + d.srhSize * 5;
+  dot.style.cssText = `left:${px}px;top:${py}px;width:${size}px;height:${size}px;background:${d.color}bb;font-size:${size>46?'8':'9'}px;border:2.5px solid ${devBorderColor(d.devModel)};`;
+  dot.textContent = d.short;
+  dot.addEventListener('mousemove', e => {
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top = (e.clientY - 8) + 'px';
+    tooltip.innerHTML = `
+      <div class="t-name">${d.name}</div>
+      <div class="t-ax">横軸｜人権↔文化：${d.ax1}</div>
+      <div class="t-ax">縦軸｜発展の権利要求：${d.ax2}</div>
+      <div class="t-ax">円サイズ｜SRHR攻防：${d.ax3}</div>
+      <div class="t-dev">発展モデル観：${d.dev}</div>
+      <div class="t-note">${d.note}</div>`;
+  });
+  dot.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  matrix.appendChild(dot);
+});
+
+// カード
+countries.forEach(d => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="c-name" style="color:${d.color}">${d.name}</div>
+    <div class="c-row"><span class="c-key">横軸</span> ${d.ax1}</div>
+    <div class="c-row"><span class="c-key">縦軸</span> ${d.ax2}</div>
+    <div class="c-row"><span class="c-key">SRHR</span> ${d.ax3}</div>
+    <div class="c-row"><span class="c-dev">発展観</span> ${d.dev}</div>
+    <div class="c-row" style="color:#888;margin-top:4px;">${d.note}</div>`;
+  cardsEl.appendChild(card);
+});
+
+// G77断層線
+const faultData = [
+  {
+    label: "共通化受容派", color: "#ffb347",
+    members: [
+      { name: "南アフリカ", color: "#27ae60", desc: "グローバル市場参加を所与として受け入れ、ODA・技術移転の義務化を要求。ジェンダー平等と開発資金要求の両立を試みる。「参加費用の要求」型の発展の権利援用。" },
+      { name: "ブラジル", color: "#16a085", desc: "南南協力を重視しつつグローバル市場参加を前提とする。先住民族フォーカスエリアの主導国として「市場参加」と「文化的固有性」の両立を模索。" }
+    ],
+    tension: "先進国から「SRHR推進を支援の条件とする」と提示された場合、条件を受け入れて資金を取るか拒否するかで揺れる。拒否すればG77結束が崩れ、受け入れればOICとの連帯が壊れる。"
+  },
+  {
+    label: "中間・実利派", color: "#f0f0a0",
+    members: [
+      { name: "インドネシア", color: "#d35400", desc: "グローバル市場に参加しつつ文化的条件を留保。ODA・技術移転要求はG77として強く主張。国内宗教団体への配慮からOICとも連帯。" },
+      { name: "インド", color: "#f39c12", desc: "南南協力を重視。西側主導のグローバル化には部分的抵抗を示しつつ実利を追求。家族関連条項留保と開発資金要求を組み合わせる。" }
+    ],
+    tension: "先住民族の権利宣言の援用をめぐって、自国内少数民族への適用という矛盾に直面する（転換点②）。「文化的慣行の尊重」という主張が自国批判の根拠に転化しうる。"
+  },
+  {
+    label: "自律的発展志向派", color: "#8080ff",
+    members: [
+      { name: "中国", color: "#e74c3c", desc: "「開発の権利＝最も基本的な人権」という独自フレームで人権概念を再定義。発展の権利本来の「共通化への抵抗」に最も近い立場だが、動機は西側覇権への対抗。" },
+      { name: "サウジアラビア", color: "#8e44ad", desc: "石油資本主義という独自の発展モデル。グローバル標準のジェンダー規範の押しつけをシャリーア・主権論で拒否。発展の権利を文化的多様性保護の根拠として援用。" }
+    ],
+    tension: "発展の権利の本来の射程（「共通化への抵抗」）に最も近いが、両国の動機は異なる。中国はシステム代替論、サウジは文化保守主義。この連帯は利害が重なる部分でしか機能しない。"
+  }
+];
+
+faultData.forEach(g => {
+  const div = document.createElement('div');
+  div.className = 'fault-group';
+  div.style.borderColor = g.color + '66';
+  let html = `<h3 style="color:${g.color}">■ ${g.label}</h3>`;
+  html += g.members.map(m => `
+    <div class="fault-row">
+      <div class="fault-flag" style="background:${m.color}99">${m.name}</div>
+      <div class="fault-content">${m.desc}</div>
+    </div>`).join('');
+  html += `<div class="fault-tension">⚡ 内部緊張：${g.tension}</div>`;
+  div.innerHTML = html;
+  fault.appendChild(div);
+});
+
+const deep = document.createElement('div');
+deep.className = 'fault-group';
+deep.style.borderColor = '#e87040';
+deep.innerHTML = `
+  <h3 style="color:#e87040">■ 共通する深層的緊張（全G77）</h3>
+  <div class="fault-content" style="line-height:1.7;">
+    「変化する労働の世界における女性の経済的エンパワーメント」というテーマ自体が、
+    グローバル市場経済への参加を所与とした発展観を前提としている。<br><br>
+    発展の権利（1986年宣言）は本来「共通化への抵抗」のために設計されたが、
+    CSW61では「共通化への参加費用の要求」として機能している。<br><br>
+    この変質に対してG77内部の3グループは異なる応答をしており、
+    それが交渉における断層線として現れる。
+  </div>
+  <div class="fault-tension">
+    最も根本的な問い：発展の権利を援用することで、
+    発展の権利が本来守ろうとした多様な発展モデルが侵食されていないか？
+  </div>`;
+fault.appendChild(deep);
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById(`view-${tab}`).classList.add('active');
+}
+</script>
+</body>
+</html>
