@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>CSW61 各国スタンス・マトリクス</title>
+<style>
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 24px;
+  }
+  h2 {
+    text-align: center;
+    font-size: 16px;
+    color: #a0c4ff;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 11px;
+    color: #7a8fa6;
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+  .wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .y-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 11px;
+    color: #a0c4ff;
+    font-weight: bold;
+    text-align: center;
+    min-width: 18px;
+    align-self: center;
+  }
+  .y-ticks {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #7a8fa6;
+    text-align: right;
+    height: 380px;
+    padding: 12px 0;
+  }
+  .matrix-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .matrix {
+    position: relative;
+    width: 540px;
+    height: 380px;
+    border: 1px solid #2a3050;
+    background: #12122a;
+    overflow: visible;
+  }
+  .grid-v {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: #2a3050;
+  }
+  .grid-h {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background: #2a3050;
+  }
+  .q-label {
+    position: absolute;
+    font-size: 8.5px;
+    color: #3a4560;
+    line-height: 1.4;
+  }
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(255,255,255,0.25);
+    transition: transform 0.15s, border-color 0.15s;
+    z-index: 10;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .dot:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+    border-color: #fff;
+    z-index: 30;
+  }
+  .x-ticks {
+    display: flex;
+    justify-content: space-between;
+    width: 540px;
+    font-size: 9px;
+    color: #7a8fa6;
+    margin-top: 5px;
+  }
+  .x-label {
+    font-size: 11px;
+    color: #a0c4ff;
+    font-weight: bold;
+    margin-top: 4px;
+    text-align: center;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 10px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.3);
+  }
+  .size-note {
+    text-align: center;
+    font-size: 10px;
+    color: #7a8fa6;
+    margin-top: 10px;
+  }
+  /* tooltip */
+  #tooltip {
+    display: none;
+    position: fixed;
+    background: #1e2a3a;
+    border: 1px solid #a0c4ff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 11px;
+    max-width: 260px;
+    z-index: 200;
+    pointer-events: none;
+    line-height: 1.6;
+  }
+  #tooltip .t-name { font-size: 13px; font-weight: bold; color: #a0c4ff; margin-bottom: 6px; }
+  #tooltip .t-ax { color: #7af0b0; margin-bottom: 2px; }
+  #tooltip .t-note { color: #bbb; margin-top: 6px; font-size: 10px; border-top: 1px solid #2a3050; padding-top: 6px; }
+  /* card list */
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 28px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .card {
+    background: #1e2535;
+    border: 1px solid #2a3a50;
+    border-radius: 8px;
+    padding: 10px 12px;
+    width: 200px;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  .card .c-name { font-weight: bold; font-size: 12px; margin-bottom: 4px; }
+  .card .c-row { color: #9ab; margin-bottom: 1px; }
+  .card .c-key { color: #7af0b0; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h2>CSW61 各国スタンス・マトリクス（模擬国連設計用）</h2>
+<div class="subtitle">
+  横軸：人権普遍主義 ←→ 文化的多様性・主権重視<br>
+  縦軸：パレスチナ決議 賛成 ↑ ↓ 反対・棄権<br>
+  円サイズ：開発の権利・G77的要求の強さ（大 = 強）
+</div>
+
+<div class="wrap">
+  <div class="y-label">パレスチナ賛成 ↑ ｜ ↓ 棄権・反対</div>
+  <div class="y-ticks">
+    <span>賛成</span>
+    <span></span>
+    <span>中立</span>
+    <span></span>
+    <span>反対</span>
+  </div>
+  <div class="matrix-col">
+    <div class="matrix" id="matrix">
+      <div class="grid-v"></div>
+      <div class="grid-h"></div>
+      <div class="q-label" style="left:8px;top:8px;">革新派＋パレスチナ支持</div>
+      <div class="q-label" style="right:8px;top:8px;text-align:right;">保守派＋パレスチナ支持</div>
+      <div class="q-label" style="left:8px;bottom:8px;">革新派＋棄権・反対</div>
+      <div class="q-label" style="right:8px;bottom:8px;text-align:right;">保守派＋棄権・反対</div>
+    </div>
+    <div class="x-ticks">
+      <span>← 人権普遍主義</span>
+      <span>中間</span>
+      <span>文化的多様性 →</span>
+    </div>
+    <div class="x-label">人権普遍主義 ←→ 文化的多様性・主権重視</div>
+  </div>
+</div>
+
+<div class="legend" id="legend"></div>
+<div class="size-note">● 円サイズ = 開発の権利・G77的要求の強さ　　● ホバーで詳細表示</div>
+
+<div id="tooltip"></div>
+
+<div class="cards" id="cards"></div>
+
+<script>
+const data = [
+  {
+    name: "EU（欧州）", short: "EU",
+    x: 0.09, y: 0.68,
+    g77: 1.0,
+    color: "#4a90d9", block: "革新派",
+    ax1: "人権普遍主義（強）— SRHR・包括的性教育を積極推進",
+    ax2: "棄権（対イスラエル配慮。占領批判への一定理解と板挟み）",
+    ax3: "低（開発の権利・ODA義務論は基本的に拒否）",
+    note: "CSW61交渉では従来合意を守る守勢。米国の立場変化を最も警戒した。"
+  },
+  {
+    name: "北欧諸国", short: "北欧",
+    x: 0.06, y: 0.22,
+    g77: 1.0,
+    color: "#5bc8af", block: "革新派",
+    ax1: "人権普遍主義（最強）— フェミニスト外交を標榜",
+    ax2: "賛成寄り（パレスチナ女性の状況に明示的懸念）",
+    ax3: "低。ただしODA 0.7%目標は自国達成済みで一定の柔軟性",
+    note: "jus cogens接続論を最も積極的に使う傾向。SRHR表現の前進を主導。"
+  },
+  {
+    name: "米国（トランプ政権）", short: "米国",
+    x: 0.38, y: 0.90,
+    g77: 1.0,
+    color: "#e87040", block: "米国（特殊）",
+    ax1: "中間→文化的多様性寄りに移行中。SRHRへの支持を後退",
+    ax2: "反対（イスラエル支持・唯一の明確な反対国）",
+    ax3: "低（ODA義務論・開発の権利を一貫して拒否）",
+    note: "発足2か月後のトランプ政権。交渉最大の不確定要素。従来の進歩的立場から離脱しつつある。"
+  },
+  {
+    name: "ロシア", short: "露",
+    x: 0.74, y: 0.28,
+    g77: 1.6,
+    color: "#c0392b", block: "保守派",
+    ax1: "文化的多様性寄り。留保なし批准・実質不履行の典型",
+    ax2: "賛成（G77・アラブグループと同調）",
+    ax3: "中程度（開発の権利を外交カードに使う）",
+    note: "CSW59の交渉難航の主因の一つ。「人権」表現の希釈を繰り返し要求。"
+  },
+  {
+    name: "サウジアラビア", short: "SA",
+    x: 0.91, y: 0.20,
+    g77: 2.6,
+    color: "#8e44ad", block: "OIC保守派",
+    ax1: "文化的多様性（最強）。シャリーアと抵触する全条項に包括留保",
+    ax2: "賛成（アラブグループ中核）",
+    ax3: "高（OICブロックとして資金要求と連動）",
+    note: "SRHRの「権利」表現・包括的性教育に最も強く抵抗。論理②（文化的多様性）と論理③（留保）を組み合わせて使う。"
+  },
+  {
+    name: "インドネシア", short: "IDN",
+    x: 0.80, y: 0.26,
+    g77: 2.9,
+    color: "#d35400", block: "OIC保守派",
+    ax1: "文化的多様性（強）。留保なし批准・実質不履行",
+    ax2: "賛成（OICと同調）",
+    ax3: "高（G77の主要国として開発の権利を強く要求）",
+    note: "法的に最も面白いケース。留保なしで批准しながら交渉では保守的。国内宗教団体への配慮が動機。"
+  },
+  {
+    name: "南アフリカ", short: "ZAF",
+    x: 0.44, y: 0.18,
+    g77: 3.2,
+    color: "#27ae60", block: "G77・アフリカ",
+    ax1: "中間（人権普遍主義を支持しつつ開発重視）",
+    ax2: "賛成（アフリカグループ・G77として）",
+    ax3: "最高クラス。開発の権利・技術移転・ODA義務を最前線で主張",
+    note: "アフリカグループ中で比較的進歩的なジェンダー立場。G77の資金・開発要求と革新的人権推進を両立しようとする。"
+  },
+  {
+    name: "インド", short: "IND",
+    x: 0.62, y: 0.34,
+    g77: 3.0,
+    color: "#f39c12", block: "G77・アジア",
+    ax1: "やや文化的多様性寄り（家族関連・第16条に留保）",
+    ax2: "賛成（G77と同調）",
+    ax3: "高（技術移転・南南協力・「相互合意した条件」を強く要求）",
+    note: "CEDAW第5条(a)・第16条(1)(f)に留保。家族関連の表現に抵抗。G77として技術移転・南南協力を積極的に押し込む。"
+  },
+  {
+    name: "ブラジル", short: "BRA",
+    x: 0.32, y: 0.24,
+    g77: 2.2,
+    color: "#16a085", block: "G77・ラテンアメリカ",
+    ax1: "中間〜やや人権普遍主義寄り（政権によって変動）",
+    ax2: "賛成（G77として）",
+    ax3: "中〜高（南南・三角協力の積極推進国）",
+    note: "2017年は中道右派政権。SRHRには留保気味だが全面的な保守派ではない。南南協力の旗手。先住民族フォーカスエリアの議長国（ブラジル代表が議長）。"
+  },
+  {
+    name: "中国", short: "中国",
+    x: 0.67, y: 0.20,
+    g77: 2.8,
+    color: "#e74c3c", block: "保守派・G77",
+    ax1: "文化的多様性寄り（主権・内政不干渉原則を一貫して重視）",
+    ax2: "賛成（G77と同調）",
+    ax3: "高（開発の権利・技術移転・南南協力を強く推進）",
+    note: "第29条のみ留保で批准。人権表現の希釈に協調しつつ開発の権利と南南協力を強く推進。「人権は内政問題」の立場を一貫維持。"
+  }
+];
+
+const matrix = document.getElementById('matrix');
+const tooltip = document.getElementById('tooltip');
+const legend = document.getElementById('legend');
+const cards = document.getElementById('cards');
+
+// 凡例
+const blocks = {};
+data.forEach(d => { blocks[d.block] = d.color; });
+Object.entries(blocks).forEach(([b, c]) => {
+  const el = document.createElement('div');
+  el.className = 'legend-item';
+  el.innerHTML = `<div class="legend-dot" style="background:${c}"></div><span>${b}</span>`;
+  legend.appendChild(el);
+});
+
+// ドット
+data.forEach(d => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  const px = d.x * 540;
+  const py = d.y * 380;
+  const size = 26 + d.g77 * 6;
+  dot.style.cssText = `left:${px}px;top:${py}px;width:${size}px;height:${size}px;background:${d.color}bb;font-size:${size > 46 ? '8' : '9'}px;`;
+  dot.textContent = d.short;
+
+  dot.addEventListener('mousemove', e => {
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top = (e.clientY - 8) + 'px';
+    tooltip.innerHTML = `
+      <div class="t-name">${d.name}</div>
+      <div class="t-ax">横軸｜人権↔文化：${d.ax1}</div>
+      <div class="t-ax">縦軸｜パレスチナ：${d.ax2}</div>
+      <div class="t-ax">円サイズ｜G77度：${d.ax3}</div>
+      <div class="t-note">${d.note}</div>`;
+  });
+  dot.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  matrix.appendChild(dot);
+});
+
+// カード
+data.forEach(d => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="c-name" style="color:${d.color}">${d.name}</div>
+    <div class="c-row"><span class="c-key">横軸</span> ${d.ax1}</div>
+    <div class="c-row"><span class="c-key">縦軸</span> ${d.ax2}</div>
+    <div class="c-row"><span class="c-key">G77度</span> ${d.ax3}</div>
+    <div class="c-row" style="color:#888;margin-top:4px;">${d.note}</div>`;
+  cards.appendChild(card);
+});
+</script>
+</body>
+</html>
