@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "renderer_version": "0.1.0",
+  "generated_at": "2026-06-15T05:44:55.990809+00:00",
+  "input": {
+    "path": "/Users/onoshusei/Desktop/課外活動/模擬国連/日吉前期/reviews/CSW61_architecture_v3/document-model.json",
+    "sha256": "853bd31a1ce58a3baf38751c05f13d5762dfe744eaa3e200ae60ab69b3e90c64"
+  },
+  "document": {
+    "id": "csw61-architecture-v3",
+    "title": "CSW61 模擬国連会議設計まとめ v3"
+  },
+  "outputs": {
+    "index": "index.html",
+    "assets": [
+      "assets/style.css",
+      "assets/review-comments.js"
+    ],
+    "diagrams": [
+      "assets/diagrams/negotiation-flow.mmd"
+    ],
+    "images": []
+  },
+  "diagrams": [
+    {
+      "block_id": "negotiation-flow",
+      "kind": "flow",
+      "source": "assets/diagrams/negotiation-flow.mmd"
+    }
+  ],
+  "review_blocks": [
+    {
+      "id": "document-header",
+      "type": "header",
+      "review_required": false
+    },
+    {
+      "id": "review-focus",
+      "type": "callout",
+      "review_required": true
+    },
+    {
+      "id": "negotiation-flow",
+      "type": "diagram",
+      "review_required": true,
+      "diagram_kind": "flow",
+      "diagram_source": "assets/diagrams/negotiation-flow.mmd"
+    },
+    {
+      "id": "section-1-概要",
+      "type": "html",
+      "review_required": false
+    },
+    {
+      "id": "section-2-1-csw61の史実的位置づけ",
+      "type": "html",
+      "review_required": false
+    },
+    {
+      "id": "section-3-2-模擬国連の設計方針",
+      "type": "html",
+      "review_required": true
+    },
+    {
+      "id": "section-4-3-会議テーマの前提に埋め込まれた深層的緊張",
+      "type": "html",
+      "review_required": true
+    },
+    {
+      "id": "section-5-4-交渉ダイナミクスの設計-4局面と3つの転換点",
+      "type": "html",
+      "review_required": true
+    },
+    {
+      "id": "section-6-5-代表団設計",
+      "type": "html",
+      "review_required": true
+    },
+    {
+      "id": "section-7-6-最終成果文書の設計",
+      "type": "html",
+      "review_required": true
+    },
+    {
+      "id": "section-8-7-csw59失敗の克服という会議コンセプトの具体的実装",
+      "type": "html",
+      "review_required": false
+    },
+    {
+      "id": "section-9-8-運営設計",
+      "type": "html",
+      "review_required": false
+    },
+    {
+      "id": "section-10-9-参考文書一覧",
+      "type": "html",
+      "review_required": false
+    },
+    {
+      "id": "section-11-関連成果物",
+      "type": "html",
+      "review_required": false
+    }
+  ]
+}

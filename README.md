@@ -9,5 +9,8 @@
 | `一次資料/pdf/` | 公式原文（PDF） |
 | `一次資料/markdown/` | PDF 変換テキスト（カテゴリ別）・[目次](一次資料/markdown/README.md) |
 | `会議準備/` | 国別調査・立場整理・発言メモなど |
+| `会議設計/` | Claude リサーチ成果物（会議設計・交渉設計） |
+| `reviews/` | HTMLレビュー用 bundle（reviewable-html-workbench） |
 | `対AI/` | Claude 等との議論用 Markdown |
+| `bin/` | レビュービルド等の補助スクリプト |
 | （ルート） | 会議当日の配布資料（議題案・Rules 等）を直置き |

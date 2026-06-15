@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "session_id": "948a736d9b4740868d8e517d231ba989",
+  "root": "/Users/onoshusei/Desktop/課外活動/模擬国連/日吉前期/reviews/CSW61_architecture_v3/bundle",
+  "bind": "127.0.0.1",
+  "port": 64642,
+  "url": "http://127.0.0.1:64642/index.html",
+  "pid": 71010,
+  "owner_pid": null,
+  "created_at": "2026-06-15T05:54:56.779491+00:00",
+  "mode": "local",
+  "status": "running",
+  "owner_session": "unknown",
+  "idle_timeout": 3600.0
+}

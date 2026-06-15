@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ja" data-theme="light" data-density="compact">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSW61 模擬国連会議設計まとめ v3</title>
+  <link rel="stylesheet" href="assets/style.css?v=2026-06-15T05:44:55.990809+00:00">
+</head>
+<body>
+  <div class="app" data-document-id="csw61-architecture-v3">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="brand-mark">
+          <span class="brand-glyph">RW</span>
+          <span class="brand-name">Reviewable HTML Workbench</span>
+        </span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="toolset">
+        <select class="chip-select" id="filterSelect" data-i18n="filterLabel">
+          <option value="all" data-i18n="filterAll"></option>
+          <option value="hide-resolved" data-i18n="filterHideResolved"></option>
+          <option value="only-open" data-i18n="filterOnlyOpen"></option>
+        </select>
+        <button class="btn ghost" id="focusToggle" type="button" data-i18n-title="focusTitle" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2H2v4M10 2h4v4M6 14H2v-4M10 14h4v-4"/></svg>
+          <span class="ft-label" data-i18n="focusLabel"></span>
+        </button>
+        <button class="btn ghost" id="publishToggle" type="button" data-i18n-title="publishTitle" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3C4.5 3 2 8 2 8s2.5 5 6 5 6-5 6-5-2.5-5-6-5Z"/><circle cx="8" cy="8" r="2"/></svg>
+          <span class="pt-label" data-i18n="publishLabel"></span>
+        </button>
+        <button class="btn ghost" id="themeToggle" type="button" data-i18n-title="themeTitle">
+          <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M13 3l-1.1 1.1M4.1 11.9 3 13"/></svg>
+          <span class="tt-label">Dark</span>
+        </button>
+      </div>
+    </header>
+    <main class="canvas" id="canvas">
+      <div class="doc-shell">
+        <div class="doc-grid">
+          <aside class="toc" data-i18n="tocLabel">
+            <p class="toc-h" data-i18n="tocHeader"></p>
+<ol class="toc-list">
+<li class="toc-h2"><span></span>
+<ol>
+<li><a href="#review-focus">レビュー観点</a></li>
+<li><a href="#negotiation-flow">交渉の4局面と3転換点</a></li>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-1-概要">概要</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-2-1-csw61の史実的位置づけ">1. CSW61の史実的位置づけ</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-3-2-模擬国連の設計方針">2. 模擬国連の設計方針</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-4-3-会議テーマの前提に埋め込まれた深層的緊張">3. 会議テーマの前提に埋め込まれた深層的緊張</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-5-4-交渉ダイナミクスの設計-4局面と3つの転換点">4. 交渉ダイナミクスの設計：4局面と3つの転換点</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-6-5-代表団設計">5. 代表団設計</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-7-6-最終成果文書の設計">6. 最終成果文書の設計</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-8-7-csw59失敗の克服という会議コンセプトの具体的実装">7. CSW59失敗の克服という会議コンセプトの具体的実装</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-9-8-運営設計">8. 運営設計</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-10-9-参考文書一覧">9. 参考文書一覧</a>
+<ol>
+</ol>
+</li>
+<li class="toc-h2"><a href="#section-11-関連成果物">関連成果物</a>
+<ol>
+</ol>
+</li>
+</ol>
+          </aside>
+          <article class="doc-main">
+            <div class="paper">
+              <header class="doc-headrow document-header" id="document-header" data-review-block="document-header" data-block-type="header" data-review-required="false">
+                <div class="doc-head-main">
+                  <p class="eyebrow"><a href="https://github.com/u-ichi/reviewable-html-workbench" target="_blank" rel="noopener">Reviewable HTML Workbench</a></p>
+                  <h1 class="doc-title">CSW61 模擬国連会議設計まとめ v3</h1>
+                  
+                </div>
+              </header>
+              
+              
+              <p class="doc-meta document-meta">Source generated at <time>2026-06-15T05:44:55.846968+00:00</time></p>
+              <section class="summary"><div class="summary-h"><svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4h10M3 8h10M3 12h6"/></svg>要約 (TL;DR)</div><p>Claudeリサーチ成果物のレビュー用HTML。会議設計の史実根拠・交渉設計・代表団配置を確認する。</p></section>
+              <div class="prose autonum document-content" id="content">
+<section class="review-block" id="review-focus" data-review-block="review-focus" data-block-type="callout" data-review-required="true">
+<h3>レビュー観点</h3>
+<div class="callout info"><div class="co-ico">i</div><div><div class="co-title">レビューしてほしいこと</div><div class="co-body"><p>史実根拠の正確性、交渉設計の実現可能性、代表団の矛盾設定、深層的緊張（発展の権利）の論理一貫性を重点的に確認してください。特に転換点①〜③の仕掛けがファシリテーター運用で機能するかも見てください。</p></div></div></div>
+</section>
+<section class="review-block" id="negotiation-flow" data-review-block="negotiation-flow" data-block-type="diagram" data-review-required="true">
+<h3>交渉の4局面と3転換点</h3>
+<div class="diagram-fallback" data-diagram-kind="flow" data-diagram-source="assets/diagrams/negotiation-flow.mmd">
+  <div class="df-head"><span class="df-badge">DIAGRAM FALLBACK</span> <span>flow diagram</span></div>
+  <div class="flow"><div class="node"><div class="n-t">局面① 前文交渉</div></div><div class="arrow">→</div><div class="node"><div class="n-t">T1</div></div><div class="arrow">→</div><div class="node"><div class="n-t">B</div></div><div class="arrow">→</div><div class="node"><div class="n-t">T2</div></div><div class="arrow">→</div><div class="node"><div class="n-t">C</div></div><div class="arrow">→</div><div class="node"><div class="n-t">T3</div></div><div class="arrow">→</div><div class="node"><div class="n-t">D</div></div><div class="arrow">→</div><div class="node"><div class="n-t">コンセンサス採択</div></div></div>
+  <div class="df-raw">source: assets/diagrams/negotiation-flow.mmd</div>
+  <pre class="diagram-source"><code>flowchart TD
+  A[局面① 前文交渉] --&gt; T1[転換点① 保守ブロック内部分裂]
+  T1 --&gt; B[局面② 実質条項の攻防]
+  B --&gt; T2[転換点② 先住民族論点の自己矛盾]
+  T2 --&gt; C[局面③ SRHR迂回表現]
+  C --&gt; T3[転換点③ CSW59正面衝突からCSW61迂回へ]
+  T3 --&gt; D[局面④ 政策空間条項の最終攻防]
+  D --&gt; E[コンセンサス採択]</code></pre>
+</div>
+</section>
+<section class="review-block" id="section-1-概要" data-review-block="section-1-概要" data-block-type="html" data-review-required="false">
+<h2>概要</h2>
+<div class="block-content"><h2>概要</h2>
+<p><strong>参照原文書：E/2017/27–E/CN.6/2017/21</strong></p>
+<p><strong>関連成果物：CSW61_MUN_最終成果文書案.md / CSW61_法的ロジック集約_根拠付き.md / CSW61_国別スタンスマトリクス.html</strong></p>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-2-1-csw61の史実的位置づけ" data-review-block="section-2-1-csw61の史実的位置づけ" data-block-type="html" data-review-required="false">
+<h2>1. CSW61の史実的位置づけ</h2>
+<div class="block-content"><h2>1. CSW61の史実的位置づけ</h2>
+<p>### 1.1 基本情報</p>
+<table><thead><tr><th>項目</th><th>内容</th></tr></thead><tbody><tr><td>正式名称</td><td>女性の地位委員会 第61回会期</td></tr><tr><td>会期</td><td>2017年3月13〜24日（ニューヨーク）</td></tr><tr><td>根拠決議</td><td>ECOSOC決議2016/3（テーマ指定）・2015/6（作業方法）</td></tr><tr><td>成果文書</td><td>合意結論（E/2017/27–E/CN.6/2017/21 第I章A節）</td></tr><tr><td>参加規模</td><td>162か国・閣僚級代表89名</td></tr></tbody></table>
+<p>### 1.2 史実の構造</p>
+<table><thead><tr><th>柱</th><th>内容</th><th>成果形式</th></tr></thead><tbody><tr><td>優先テーマ</td><td>変化する労働の世界における女性の経済的エンパワーメント</td><td>合意結論（コンセンサス採択）</td></tr><tr><td>フォーカスエリア</td><td>先住民族女性のエンパワーメント（CSW史上初の単独議題化）</td><td>議長サマリー（E/CN.6/2017/12）</td></tr><tr><td>定例決議</td><td>①パレスチナ女性（L.3）　②職場セクハラ防止（L.4）</td><td>記録投票／無投票採択</td></tr></tbody></table>
+<p>パレスチナ女性決議はCSWが毎年採択する定例決議であり、合意結論（優先テーマ）とは制度上別トラックで処理される。史上一度も合意結論に統合されたことはなく、アラブグループ自身も別決議・記録投票としての採択に外交的意味を見出しているため、統合の動機が双方に存在しない。</p>
+<p>### 1.3 CSW61が置かれた文脈</p>
+<table><thead><tr><th>回</th><th>年</th><th>出来事</th><th>CSWへの影響</th></tr></thead><tbody><tr><td>CSW59</td><td>2015</td><td>北京+20。保守ブロックが「人権」表現の全面削除を要求</td><td>合意結論採択に失敗・政治宣言に格下げ</td></tr><tr><td>CSW60</td><td>2016</td><td>SDGs採択直後</td><td>80時間の交渉の末にコンセンサス採択</td></tr><tr><td>CSW61</td><td>2017</td><td>トランプ政権発足2か月後</td><td>米国の立場変化が最大の不確定要素</td></tr></tbody></table>
+<p><strong>特記事項：</strong></p>
+<ul><li>CSWには正式な議事録（Summary Record）が存在しない。交渉の詳細はNGOモニタリング報告等に依存する。</li><li>ECOSOCには議事録（E/2017/SR.32）があり、パレスチナ決議の審議・採決記録が残る。</li></ul>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-3-2-模擬国連の設計方針" data-review-block="section-3-2-模擬国連の設計方針" data-block-type="html" data-review-required="true">
+<h2>2. 模擬国連の設計方針</h2>
+<div class="block-content"><h2>2. 模擬国連の設計方針</h2>
+<p>### 2.1 議題の範囲</p>
+<p>本会議は史実の優先テーマ（論点①：経済×女性）とフォーカスエリア（論点③：先住民族×女性）を統合した合意結論のコンセンサス採択をゴールとする。</p>
+<p>残る史実上の主要争点は以下の5点であり、十分な交渉密度を持つ：</p>
+<table><thead><tr><th>争点</th><th>対立軸</th></tr></thead><tbody><tr><td>A：SRHR「権利」表現</td><td>革新派 vs OIC保守派</td></tr><tr><td>B：開発の権利・ODA義務</td><td>G77 vs 先進国</td></tr><tr><td>C：先住民族の権利宣言の援用強度</td><td>革新派 vs 米国・カナダ</td></tr><tr><td>D：「政策空間」文言の実質条項への波及</td><td>保守派 vs 革新派</td></tr><tr><td>E：CEDAW留保の「撤回」vs「見直し」</td><td>革新派 vs 包括留保国</td></tr></tbody></table>
+<p>### 2.2 会議コンセプト</p>
+<blockquote><p><strong>「CSW59の失敗を参加者自身が対話で乗り越える体験」</strong></p></blockquote>
+<p>単なる文言のバーター交渉ではなく、以下の3点を会議設計の核心に置く：</p>
+<ol><li><strong>各陣営の理念的止揚</strong>：「内政不干渉だからムリ」というワンパターンの攻防を超え、各ブロックの内部矛盾を露呈させることで理念的な対話を生む</li><li><strong>CSW59の失敗の克服体験</strong>：「人権」という抽象語の正面衝突ではなく、既存文書の文言を援用した迂回表現の発明という<strong>法的創造性の競争</strong>として設計する</li><li><strong>高いハードルのコンセンサス採択</strong>：全員が「不満だが受け入れられる」ギリギリの文言に着地することを明るい目標として設定しつつ、到達が容易ではない構造にする</li></ol>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-4-3-会議テーマの前提に埋め込まれた深層的緊張" data-review-block="section-4-3-会議テーマの前提に埋め込まれた深層的緊張" data-block-type="html" data-review-required="true">
+<h2>3. 会議テーマの前提に埋め込まれた深層的緊張</h2>
+<div class="block-content"><h2>3. 会議テーマの前提に埋め込まれた深層的緊張</h2>
+<p>### 3.1 「変化する労働の世界」という前提の解剖</p>
+<p>本会議のテーマ設定には以下の世界観が暗黙に埋め込まれています：</p>
+<ul><li>グローバル化した市場経済が存在する</li><li>技術革新（デジタル化・自動化）が労働市場を変容させている</li><li>その変容の中で女性が平等に参加できるようにする</li></ul>
+<p>合意結論第23段落がこれを明示している：「グローバリゼーションが女性の経済的エンパワーメントに機会と課題の両方をもたらすことを認識する」。グローバリゼーション自体の是非は問わない。所与の条件として受け入れた上で女性の地位向上を論じる構造です。</p>
+<p>### 3.2 発展の権利との構造的緊張</p>
+<p><strong>発展の権利（Right to Development）の本来の射程：</strong></p>
+<p>発展の権利宣言（1986年・総会決議41/128）は脱植民地化後の新国際経済秩序（NIEO）要求の延長として設計されました。各人民が自らの発展モデルを選択する権利、資源に対する永久主権が中核です。本来は「共通化への抵抗」の道具として機能するはずでした。</p>
+<p><strong>CSW61での発展の権利の援用形態：</strong></p>
+<p>合意結論第10段落に「開発の権利を含む、すべての女性・女児の人権と基本的自由」という表現が挿入されています。G77がこの挿入を要求したのは、ODA義務要求を「人権義務の履行」として位置づけるためです。</p>
+<p>ここに根本的な変質があります：</p>
+<pre><code>本来の発展の権利（1986年）：
+「我々は異なる発展モデルを選ぶ権利がある」
+「共通化への抵抗」
+　　↓ 歴史的変容（冷戦終結・グローバル化）
+CSW61での発展の権利（2017年）：
+「グローバル市場への参加は所与」
+「参加コストを先進国が払え」
+「共通化への参加費用の要求」</code></pre>
+<p>G77はグローバル市場経済への統合を選択・あるいは余儀なくされた結果、発展の権利を「共通化への抵抗」ではなく「共通化への参加費用の要求」として使うようになっています。</p>
+<p><strong>「誰の発展か」問題：</strong></p>
+<p>発展の権利宣言第1条は「人民（peoples）」を権利主体の一つとしており、国家が発展の権利を代表して行使する余地があります。しかし「変化する労働の世界における女性の経済的エンパワーメント」は女性<strong>個人</strong>を権利主体とします：</p>
+<pre><code>発展の権利の国家代表論：
+「我が国の発展の在り方は我が国が決める」
+「女性の経済参加の形も国家・文化的文脈の中で決まる」
+        ↕ 抵触
+女性の経済的エンパワーメント論：
+「女性個人が経済的権利の主体」
+「国家・家族・文化が個人としての女性の権利を制限してはならない」</code></pre>
+<p><strong>技術移転の非対称性：</strong></p>
+<p>合意結論第25段落の「相互合意した条件での技術移転」要求は、「変化する労働の世界」を作り出した先進国の技術に途上国が適応するための費用を先進国に求める構造になっています。発展の権利が想定した「自律的発展」ではなく、先進国が生み出した変化への対応コストの分担要求です。</p>
+<p><strong>「ディーセントワーク」概念の普遍性問題：</strong></p>
+<p>合意結論全体を通じてILOの「ディーセントワーク」概念が基準として使われていますが、これは有償・個人・正規雇用を中心とする西側の労働観を前提としています。共同体的・互酬的・非貨幣的な経済活動は「ディーセントワーク」の枠外に置かれ、正規有償雇用への転換の対象として位置づけられます（合意結論第40条(nn)）。これはグローバル市場経済への包摂を「発展」として自明視した設計です。</p>
+<p>### 3.3 深層的逆説</p>
+<p>これらを統合すると、最も根本的な問いが浮かび上がります：</p>
+<blockquote><p><strong>「変化する労働の世界における女性の経済的エンパワーメント」というテーマ自体が、発展の権利が保障しようとした「自律的な発展モデルの選択」を、特定の経済モデル（グローバル市場経済）への包摂として書き換えていないか？</strong></p></blockquote>
+<p>さらに深刻なのは、発展の権利を援用することでグローバル市場経済への女性の参加が加速し、発展の権利が本来守ろうとした多様な発展モデルが侵食されるという逆説です。</p>
+<p>この深層的緊張は会議中に参加者が自力で到達することは難しいが、<strong>転換点①の交渉が最も深いレベルで機能したとき</strong>に表面化します。</p>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-5-4-交渉ダイナミクスの設計-4局面と3つの転換点" data-review-block="section-5-4-交渉ダイナミクスの設計-4局面と3つの転換点" data-block-type="html" data-review-required="true">
+<h2>4. 交渉ダイナミクスの設計：4局面と3つの転換点</h2>
+<div class="block-content"><h2>4. 交渉ダイナミクスの設計：4局面と3つの転換点</h2>
+<p>### 4.1 4局面の構成</p>
+<pre><code>局面①：序盤（前文交渉）
+  ↓ 転換点①：保守ブロック内部分裂の誘発
+局面②：中盤（実質条項・3つの同時進行する攻防）
+  ↓ 転換点②：先住民族論点で保守派の論理が自己矛盾する
+局面③：後半（SRHR迂回表現の発明）
+  ↓ 転換点③：CSW59方式（正面衝突）からCSW61方式（迂回）への転換
+局面④：終盤（政策空間条項をめぐる最終攻防→コンセンサス採択）</code></pre>
+<p>---</p>
+<p>### 4.2 局面① 序盤：前文交渉</p>
+<p><strong>最初の攻防点：PP5（ICPD「再確認」か「想起」か）</strong></p>
+<p>革新派がカイロ行動計画（ICPD）を「再確認（reaffirm）」する文言を要求。サウジ・バチカンが「想起（recall）」へのダウングレードを要求。この一語の差がSRHR攻防の伏線となるため、革新派の最初の「死守ライン」として機能する。</p>
+<p><strong>PP6「政策空間」の前文への挿入</strong></p>
+<p>ロシア・中国が「各国の政策空間とリーダーシップを尊重」という文言の挿入を要求。革新派はこれが後の実質条項の抜け穴になることを察知し抵抗するが、「前文に限定する」という条件で受け入れる方向へ。</p>
+<p><strong>PP7のパッケージ交渉</strong></p>
+<p>「普遍的・不可分・相互依存」（革新派の要求）と「開発の権利を含む」（G77の要求）を同一段落に共存させるパッケージ交渉が発生。双方が片方ずつ不満を抱えながら受け入れる構造。</p>
+<p>---</p>
+<p>### 4.3 転換点①：保守ブロック内部分裂の誘発</p>
+<p><strong>設計上の仕掛け：G77資金要求を先行させる</strong></p>
+<p>実質条項のB（開発の権利・ODA）の交渉を先行させることで、OIC保守国（サウジ・インドネシア）がG77として先進国に資金要求を突きつける側に回る局面を作る。</p>
+<p><strong>露呈する矛盾：</strong></p>
+<p>「内政不干渉」を盾に人権表現を拒否していた国が、今度は先進国に資金コミットメントを求める。革新派（北欧・EU）がこの非対称性を突く：</p>
+<blockquote><p>「あなた方は開発には外部コミットメントを求め、人権には内政不干渉を主張する。この非対称性をどう正当化するか？」</p></blockquote>
+<p><strong>深層的な問いへの展開（理想的な場合）：</strong></p>
+<p>この攻防が深まると、発展の権利の変質という問いに接続します：</p>
+<pre><code>革新派：「あなた方が要求しているのは、グローバル化した
+　　　　 システムへの参加コストの補填であり、そのシステム
+　　　　 自体への批判ではない。発展の権利が本来意味した
+　　　　 『自律的な発展モデルの選択』はどこに行ったのか？」
+
+G77（サウジ）：「開発の権利は既確立の国際法原則。人権の
+　　　　　　　　普遍性は西洋的価値の押しつけ」
+
+中国：「開発の権利こそが最も基本的な人権。
+　　　　グローバル化の恩恵を享受している先進国が
+　　　　費用を負担するのは当然」
+
+革新派：「しかしそのグローバル化したシステムへの参加を
+　　　　 所与としている時点で、発展モデルの選択権は
+　　　　 すでに放棄されていないか？」</code></pre>
+<p><strong>先進国が「支援しますわ」で終わらないための設計：</strong></p>
+<p>先進国代表団が安易に資金支援を約束することを防ぐ構造として、G77が「支援の意思があるなら義務化の文言に同意を」と畳み掛け、先進国が「支援の意思はあるがSRHR推進を条件とする」と返す局面を設計に組み込む。</p>
+<p>するとOICが「条件付き支援は内政干渉であり発展の権利の侵害」と論じざるを得なくなる。「支援の意思」と「条件の受け入れ可否」が分離し、G77内部の亀裂（条件付きでも支援を取る南アフリカ・ブラジル vs 条件なしを要求するサウジ・インドネシア）が可視化される。</p>
+<p>---</p>
+<p>### 4.4 局面② 中盤：3つの同時進行する攻防</p>
+<p><strong>攻防A：CEDAW留保（(a)条項）</strong></p>
+<pre><code>革新派：「留保を撤回する（withdraw）」
+　　↕
+サウジ・インドネシア：「留保は主権的権利。撤回要求は内政干渉」
+　　↕
+最終調停候補：「撤回することを検討し見直す（review with a view to withdrawing）」</code></pre>
+<p><strong>攻防B：ODA・技術移転（(ll)(ee)条項）</strong></p>
+<pre><code>G77（南アフリカ・インド）：「ODA義務を履行する（fulfill the obligation）」
+　　↕
+EU・北欧：「促す（urge）にとどめる。義務化は拒否」
+　　↕
+米国（トランプ政権）：「0.7%目標の文言自体を削除」を要求
+　　↕
+G77の結束強化：米国の削除要求がG77を結束させてODA義務論をエスカレートさせる（バックファイア）
+　　↕
+最終調停候補：「促す（urge）」＋0.7%目標値は残存</code></pre>
+<p>なお「技術移転」をめぐる争点には3.2で論じた深層的非対称性が潜んでいる。「変化する労働の世界」を作り出した先進国の技術に途上国が適応するための費用を先進国に求める構造であり、発展の権利が本来想定した「自律的発展」とは異なる。</p>
+<p><strong>攻防C：先住民族の権利宣言（(gg)条項）</strong></p>
+<pre><code>革新派・ブラジル：先住民族の権利宣言を「再確認する（reaffirm）」
+　　↕
+米国・カナダ：宣言への反対・棄権国として「重要性に留意する（noting the importance of）」へのダウングレードを要求
+　　↕
+サウジ・インドネシア：「伝統的・先祖代々の文化慣行を尊重する」という文言の挿入を試みる</code></pre>
+<p>---</p>
+<p>### 4.5 転換点②：先住民族論点で保守派の論理が自己矛盾する</p>
+<p><strong>設計上の仕掛け：「文化的固有性の尊重」の逆用</strong></p>
+<p>「文化慣行を尊重する」という保守派が挿入しようとした表現を、革新派が逆用する：</p>
+<blockquote><p>「インドネシアやインドは国内に先住民族・少数民族を抱えている。『先住民族女性の伝統的慣行を尊重せよ』という表現は、自国の少数民族コミュニティへの外部批判を封じる根拠にもなるが、同時に自国の少数民族女性への差別的慣行（花嫁代償・女性割礼等）を温存することも意味しないか？」</p></blockquote>
+<p><strong>保守ブロックの分裂：</strong></p>
+<ul><li>サウジ：先住民族問題と無縁なので「文化慣行の尊重」に賛成できる</li><li>インドネシア・インド：自国の少数民族政策への批判に転化しうるため留保が必要になる</li></ul>
+<p>これで「保守 vs 革新」という二項対立が崩れ、保守ブロック内部の利害分裂が可視化される。</p>
+<p>---</p>
+<p>### 4.6 局面③ 後半：SRHR迂回表現の発明（クライマックス）</p>
+<p><strong>CSW59の失敗パターン（再現してはいけない）：</strong> 「人権」表現をめぐる抽象的正面衝突 → 保守ブロックの全面削除要求 → 着地点を失って政治宣言に格下げ</p>
+<p><strong>CSW61方式（参加者に発見させる）：</strong> 「SRHR」という一語を回避しつつ、カイロ行動計画（PP5で「再確認」済み）の文言を援用することで実質を確保する迂回表現の発明。</p>
+<pre><code>革新派の要求：「性と生殖の健康と権利（SRHR）」の一語明記
+　　↕
+保守派の要求：「権利」を「健康」に変えよ
+　　↕
+北欧が提案する迂回表現：
+「国際人口開発会議行動計画および北京行動綱領に従い、
+ 女性の人権には、強制・差別・暴力なしに性的・生殖的健康を含む
+ 事項を自ら制御・決定する権利が含まれることを認識する」</code></pre>
+<p>保守派が受け入れ可能な論理：カイロ行動計画はPP5で「再確認」されている。その内容の反復に過ぎないという論理で拒否しにくい。</p>
+<p>革新派が不満を抱えつつ受け入れる論理：「制御・決定する権利」という実質的な権利表現が残っている。</p>
+<p>これがCSW59克服の瞬間：抽象語の正面衝突ではなく、すでに合意済みの過去文書の文言を積み重ねることで実質を確保する——これがCSW交渉の本質的な技術。</p>
+<p>---</p>
+<p>### 4.7 局面④ 終盤：政策空間条項をめぐる最終攻防</p>
+<p>ロシア・中国が実質条項の末尾に以下の条項の挿入を要求：</p>
+<blockquote><p>「上記の行動要請の実施は、国内法および各国の優先事項、ならびに異なる国家・地域の慣行・アプローチを十分に考慮しながら行われるものとする」</p></blockquote>
+<p>この要求の根拠は2030アジェンダ（全加盟国が賛成）から引用された「政策空間」概念であり、革新派は概念そのものを否定できない。</p>
+<p>革新派の反論：「前文PP6にすでに政策空間への言及がある。実質条項への挿入はすべての行動要請を事実上無効化する白紙委任条項だ」</p>
+<p>議長（ブラジル）の調停：「PP6への政策空間言及で十分。実質条項への挿入は受け入れられない。ただし各条項の冒頭に『適切な場合には（where appropriate）』という限定句を追加することで、各国の状況への配慮を示す」</p>
+<p>この政策空間攻防は3.2の深層的緊張と直接接続している。「各国の発展モデルを尊重する」という政策空間論は、グローバル市場経済への包摂を自明視した会議テーマへの保守派からの根本的異議申し立てとも読める。</p>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-6-5-代表団設計" data-review-block="section-6-5-代表団設計" data-block-type="html" data-review-required="true">
+<h2>5. 代表団設計</h2>
+<div class="block-content"><h2>5. 代表団設計</h2>
+<p>### 5.1 代表団一覧と交渉上の役割</p>
+<table><thead><tr><th>代表団</th><th>ブロック</th><th>主要な戦略目標</th><th>固有の制約・矛盾</th></tr></thead><tbody><tr><td>EU</td><td>革新派</td><td>SRHR実質確保・CEDAW留保撤回要求</td><td>トランプ政権の動向を警戒し守勢に回る</td></tr><tr><td>北欧（スウェーデン・ノルウェー）</td><td>革新派</td><td>SRHR迂回表現の発明・jus cogens接続論</td><td>ODA 0.7%目標は自国達成済みで比較的柔軟</td></tr><tr><td>ロシア</td><td>保守派</td><td>「人権」表現の希釈・政策空間条項の実質条項挿入</td><td>CEDAW留保なし批准→「義務不履行では？」と突かれる</td></tr><tr><td>サウジアラビア</td><td>OIC保守派</td><td>SRHR「権利」表現の阻止・ICPD「再確認」のダウングレード</td><td>CEDAW包括留保→革新派に無効論を突きつけられる</td></tr><tr><td>インドネシア</td><td>OIC保守派＋G77</td><td>文化的多様性・ODA義務要求</td><td>留保なし批准＋国内少数民族問題で自己矛盾が露呈しうる</td></tr><tr><td>米国（トランプ政権）</td><td>特殊（最大不確定要素）</td><td>ODA 0.7%目標の削除・SRHR後退</td><td>削除要求がG77を結束させるバックファイアを引き起こす</td></tr><tr><td>南アフリカ</td><td>G77・アフリカ</td><td>ODA義務化・技術移転・開発の権利</td><td>共通化受容派：G77の中では「参加費用の要求」寄り</td></tr><tr><td>インド</td><td>G77・アジア</td><td>技術移転（条件なし）・南南協力</td><td>家族関連条項留保＋国内少数民族問題でCの転換点②に絡む</td></tr><tr><td>ブラジル（議長国）</td><td>G77＋調停役</td><td>会議の着地・南南協力推進</td><td>先住民族フォーカスエリアの実質的主導国。調停と自国利益の板挟み</td></tr><tr><td>中国</td><td>保守派＋G77</td><td>開発の権利・主権原則・南南協力</td><td>「開発の権利＝最も基本的な人権」という独自フレームで両陣営に食い込む</td></tr></tbody></table>
+<p>### 5.2 G77内部の断層線</p>
+<p>v3で追加。G77は一枚岩ではなく、発展の権利の援用方法をめぐって内部に断層線を持つ：</p>
+<table><thead><tr><th>G77内の立場</th><th>代表的国</th><th>発展の権利の使い方</th><th>女性の権利との関係</th></tr></thead><tbody><tr><td>共通化受容派</td><td>南アフリカ・ブラジル</td><td>グローバル市場参加コストの分担要求</td><td>ジェンダー平等と開発を両立させようとする</td></tr><tr><td>条件付き抵抗派</td><td>インドネシア・インド</td><td>文化的多様性を盾に一部条件を拒否</td><td>女性の権利をG77利益の一部として選択的に採用</td></tr><tr><td>独自フレーム派</td><td>中国</td><td>「開発の権利＝最も基本的な人権」として人権概念を再定義</td><td>女性の権利を開発の従属変数として位置づける</td></tr></tbody></table>
+<p>### 5.3 各代表団が持つ「固有の法的カード」</p>
+<table><thead><tr><th>代表団</th><th>最強のカード</th><th>弱点（突かれやすい点）</th></tr></thead><tbody><tr><td>EU</td><td>CEDAW第28条2項（留保無効論）</td><td>欧州内の少数民族差別等を突かれる</td></tr><tr><td>北欧</td><td>ウィーン宣言第5段落・jus cogens接続論</td><td>jus cogens未確立という現実</td></tr><tr><td>ロシア</td><td>ウィーン条約法条約留保規定・主権原則</td><td>留保なし批准なのに実質不履行という矛盾</td></tr><tr><td>サウジ</td><td>CEDAW第28条1項（留保の正当性）</td><td>CEDAW委員会による包括留保の無効判断リスク</td></tr><tr><td>インドネシア</td><td>数の論理（G77）＋文化的多様性</td><td>留保なし批准＋国内少数民族政策との矛盾</td></tr><tr><td>米国</td><td>資金拠出実績</td><td>ODA目標削除がG77を結束させるバックファイア</td></tr><tr><td>南アフリカ</td><td>開発の権利宣言（1986年・総会決議41/128）</td><td>G77内断層（共通化受容派として孤立しうる）</td></tr><tr><td>インド</td><td>南南・三角協力の実績</td><td>CEDAW第16条留保と女性の権利推進の矛盾</td></tr><tr><td>ブラジル</td><td>議長権限（議事整理・調停案提示）</td><td>調停役として自国主張を抑える必要がある</td></tr><tr><td>中国</td><td>「開発の権利＝人権」フレームで両陣営を揺さぶる</td><td>「人権は内政問題」の立場とopinio juris否定論の矛盾</td></tr></tbody></table>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-7-6-最終成果文書の設計" data-review-block="section-7-6-最終成果文書の設計" data-block-type="html" data-review-required="true">
+<h2>6. 最終成果文書の設計</h2>
+<div class="block-content"><h2>6. 最終成果文書の設計</h2>
+<p>### 6.1 文書構造</p>
+<p>最終成果文書（MUN/CSW61/2024/L.1）は史実の合意結論を骨格に設計した。詳細は別ファイル（CSW61_MUN_最終成果文書案.md）を参照。</p>
+<table><thead><tr><th>部分</th><th>段落</th><th>設計上の主な争点</th></tr></thead><tbody><tr><td>前文</td><td>PP1〜PP9</td><td>PP5（ICPD「再確認」）・PP6（政策空間）・PP7（普遍性＋開発の権利のパッケージ）</td></tr><tr><td>実質条項A</td><td>(a)(b)(c)</td><td>CEDAW留保の「撤回」vs「見直し」</td></tr><tr><td>実質条項B</td><td>(d)(e)(f)</td><td>経済的権利（比較的合意しやすい）</td></tr><tr><td>実質条項C</td><td>(x)</td><td>SRHRクライマックス・迂回表現</td></tr><tr><td>実質条項D</td><td>(gg)</td><td>先住民族の権利宣言の援用強度</td></tr><tr><td>実質条項E</td><td>(ll)(mm)(ee)</td><td>ODA義務・技術移転・南南協力</td></tr><tr><td>削除条項</td><td>（政策空間条項）</td><td>最終攻防・議長調停で実質条項への挿入を阻止</td></tr></tbody></table>
+<p>### 6.2 全員の「不満と受け入れ」の構造</p>
+<table><thead><tr><th>代表団</th><th>取れたもの</th><th>取れなかったもの</th></tr></thead><tbody><tr><td>EU・北欧</td><td>PP5のICPD「再確認」＋(x)の実質的SRHR表現</td><td>「SRHR」の一語表現</td></tr><tr><td>サウジ・OIC</td><td>(x)でSRHR一語を阻止</td><td>ICPD「再確認」が残った</td></tr><tr><td>ロシア</td><td>PP6「政策空間」が前文に入った</td><td>実質条項への政策空間条項挿入を阻止された</td></tr><tr><td>G77</td><td>ODA 0.7%目標が(ll)に残った</td><td>「義務」ではなく「促す」にとどまった</td></tr><tr><td>米国</td><td>ODA義務が「urge」（非拘束）にとどまった</td><td>0.7%目標値自体を落とせなかった</td></tr><tr><td>中国</td><td>PP7に「開発の権利を含む」が挿入された</td><td>「普遍的・不可分」表現と同一段落に置かれた</td></tr></tbody></table>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-8-7-csw59失敗の克服という会議コンセプトの具体的実装" data-review-block="section-8-7-csw59失敗の克服という会議コンセプトの具体的実装" data-block-type="html" data-review-required="false">
+<h2>7. CSW59失敗の克服という会議コンセプトの具体的実装</h2>
+<div class="block-content"><h2>7. CSW59失敗の克服という会議コンセプトの具体的実装</h2>
+<table><thead><tr><th>CSW59の失敗</th><th>模擬国連での克服設計</th></tr></thead><tbody><tr><td>抽象語の正面衝突</td><td>既存文書援用による迂回表現の発明（転換点③）</td></tr><tr><td>二項対立の固定化</td><td>保守ブロック内部分裂の誘発（転換点①②）</td></tr><tr><td>G77一枚岩の想定</td><td>G77内部断層線の可視化（5.2）</td></tr></tbody></table>
+<p>### 参加者に体感させるべき3つのこと</p>
+<p><strong>① 文言は政治である</strong> 「再確認（reaffirm）」と「留意（note）」の違い、「権利（rights）」と「健康（health）」の違い——一語の差に各国の利害と長期的な規範形成戦略が凝縮されている。</p>
+<p><strong>② ソフトローは「積み重ね」で意味を持つ</strong> 合意結論は法的義務を生まないが、「前回の合意結論を再確認する」という文言の積み重ねがopinio jurisを形成し、将来のハードロー化への布石となる。</p>
+<p><strong>③ ロジックの応酬は「武器の交換」ではなく「矛盾の発見」で動く</strong> 「内政不干渉だからムリ」というワンパターンは、その国自身の他の主張との矛盾を突かれたとき初めて動く。特に発展の権利の援用が「共通化への抵抗」か「参加費用の要求」かという問いは、その矛盾を最も鋭く照らし出す。</p>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-9-8-運営設計" data-review-block="section-9-8-運営設計" data-block-type="html" data-review-required="false">
+<h2>8. 運営設計</h2>
+<div class="block-content"><h2>8. 運営設計</h2>
+<p>### 8.1 タイムライン（1日会議の場合）</p>
+<table><thead><tr><th>時間</th><th>内容</th><th>局面</th></tr></thead><tbody><tr><td>0:00〜0:30</td><td>開会・基調演説（各代表団3分）</td><td>—</td></tr><tr><td>0:30〜1:30</td><td>前文交渉（PP1〜PP9）</td><td>局面①</td></tr><tr><td>1:30〜2:00</td><td>コーヒーブレイク＋非公式協議</td><td>転換点①</td></tr><tr><td>2:00〜3:30</td><td>実質条項交渉（A〜E）</td><td>局面②</td></tr><tr><td>3:30〜4:30</td><td>SRHRクライマックス交渉</td><td>局面③・転換点③</td></tr><tr><td>4:30〜5:00</td><td>昼食休憩＋非公式協議</td><td>—</td></tr><tr><td>5:00〜6:00</td><td>最終攻防（政策空間条項）</td><td>局面④</td></tr><tr><td>6:00〜6:30</td><td>コンセンサス確認・採択</td><td>—</td></tr></tbody></table>
+<p>### 8.2 ファシリテーター（議長）の役割設計</p>
+<table><thead><tr><th>タイミング</th><th>介入内容</th></tr></thead><tbody><tr><td>転換点①前</td><td>G77資金交渉を先行させるよう議事整理</td></tr><tr><td>転換点①中</td><td>「支援の意思」と「支援の条件（SRHR）」を切り分けさせる問いかけ</td></tr><tr><td>転換点②前</td><td>先住民族の権利宣言の「文化慣行」文言挿入の動きを可視化</td></tr><tr><td>転換点③前</td><td>「CSW59はなぜ失敗したか」をリマインドして迂回表現発明を促す</td></tr><tr><td>局面④</td><td>政策空間条項の調停案（「適切な場合には」限定句の追加）を提示</td></tr></tbody></table>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-10-9-参考文書一覧" data-review-block="section-10-9-参考文書一覧" data-block-type="html" data-review-required="false">
+<h2>9. 参考文書一覧</h2>
+<div class="block-content"><h2>9. 参考文書一覧</h2>
+<table><thead><tr><th>文書</th><th>区分</th></tr></thead><tbody><tr><td>E/2017/27–E/CN.6/2017/21（CSW61報告書・合意結論）</td><td>一次資料</td></tr><tr><td>E/2017/SR.32（ECOSOC議事録）</td><td>一次資料</td></tr><tr><td>ECOSOC決議2015/6・2016/3</td><td>一次資料</td></tr><tr><td>E/CN.6/2017/12（先住民族女性議長サマリー）</td><td>一次資料</td></tr><tr><td>E/2015/27（CSW59政治宣言）</td><td>一次資料</td></tr><tr><td>CEDAW（国連条約集第1249巻 No.20378）</td><td>一次資料</td></tr><tr><td>ILO基本条約8条約</td><td>一次資料</td></tr><tr><td>A/HRC/17/31（ビジネスと人権指導原則）</td><td>一次資料</td></tr><tr><td>パリ協定（FCCC/CP/2015/10/Add.1）</td><td>一次資料</td></tr><tr><td>A/RES/70/1（2030アジェンダ）</td><td>一次資料</td></tr><tr><td>A/RES/61/295（先住民族の権利宣言）</td><td>一次資料</td></tr><tr><td>A/RES/69/313（アディスアベバ行動計画）</td><td>一次資料</td></tr><tr><td>A/RES/71/1（ニューヨーク難民・移民宣言）</td><td>一次資料</td></tr><tr><td>開発の権利宣言（総会決議41/128、1986年）</td><td>参照文書</td></tr><tr><td>ウィーン世界人権会議宣言（1993年）第5段落</td><td>参照文書</td></tr></tbody></table>
+<p>---</p></div>
+</section>
+<section class="review-block" id="section-11-関連成果物" data-review-block="section-11-関連成果物" data-block-type="html" data-review-required="false">
+<h2>関連成果物</h2>
+<div class="block-content"><h2>関連成果物</h2>
+<table><thead><tr><th>ファイル</th><th>内容</th></tr></thead><tbody><tr><td>CSW61_MUN_最終成果文書案.md</td><td>ファシリテーター用・交渉注記付き成果文書</td></tr><tr><td>CSW61_法的ロジック集約_根拠付き.md</td><td>各ロジックの史実根拠一覧</td></tr><tr><td>CSW61_国別スタンスマトリクス_v2.html</td><td>4軸インタラクティブマトリクス（発展モデル観軸追加）</td></tr><tr><td>CSW61_参考資料リスト.md</td><td>一次資料38件の完全リスト</td></tr></tbody></table>
+<p>---</p>
+<p>*v3更新内容：①「変化する労働の世界」という前提の解剖と発展の権利との深層的緊張を第3章として追加。②発展の権利の「共通化への抵抗→参加費用要求」への変質を転換点①の交渉設計に組み込み。③G77内部断層線（5.2）を新設。④パレスチナ決議の取り扱いを史実の制度的説明に整理。*</p></div>
+</section>
+              </div>
+            </div>
+          </article>
+          <aside class="cmt-rail" data-i18n="railLabel">
+            <div class="cmt-rail-h">
+              <span data-i18n="railHeader"></span>
+              <span class="cmt-rail-count" id="cmtCount">—</span>
+            </div>
+            <div class="cmt-layer" id="cmtLayer"></div>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <div class="pub-exit" id="pubExit" role="status">
+      <span class="pe-label"><b data-i18n="publishExitLabel"></b></span>
+      <div class="pe-seg" role="group">
+        <button class="pe-w on" data-pw="standard" data-i18n="publishStandard"></button>
+        <button class="pe-w" data-pw="max" data-i18n="publishMax"></button>
+      </div>
+      <button class="pe-btn primary" id="pubDownloadBtn">
+        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0 3-3M8 10 5 7M2.5 11v1.5A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5V11"/></svg>
+        <span data-i18n="publishDownload"></span>
+      </button>
+      <button class="pe-btn" id="pubExitBtn">
+        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+        <span data-i18n="publishExit"></span>
+      </button>
+    </div>
+  </div>
+  <script src="assets/review-comments.js?v=2026-06-15T05:44:55.990809+00:00"></script>
+</body>
+</html>
